@@ -1,5 +1,6 @@
 ﻿
 using Azure.Messaging.ServiceBus;
+using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -11,7 +12,13 @@ namespace Restaurant.MessageBus
 {
     public class AzureServiceBusMessageBus : IMessageBus
     {
-        private string connectionString = "Endpoint=sb://mangorestaurantjanek.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=tAVWC/CD/8NQrVahKBItD1mciu60+c9ClVswjDicOBE=";
+        private readonly string connectionString;
+
+        public AzureServiceBusMessageBus(IConfiguration configuration)
+        {
+            connectionString = configuration.GetValue<string>("ServiceBusConnectionString");
+        }
+
         public async Task PublishMessage(BaseMessage message, string topicName)
         {
 
